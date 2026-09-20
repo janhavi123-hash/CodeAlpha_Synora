@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const path = require('path');
+const fs = require('fs');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
@@ -14,6 +15,12 @@ const app = express();
 const server = http.createServer(app);
 
 connectDB();
+
+// Ensure the uploads folder exists (it's gitignored, so it won't exist on a fresh deploy)
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
 app.use(cors());
 app.use(express.json());
