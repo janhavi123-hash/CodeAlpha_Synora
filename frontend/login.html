@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login — Synora</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">S</div>
+      <h1>SYNORA</h1>
+      <p>A connected space where people, ideas, and collaboration stay in sync.</p>
+    </div>
+
+    <h2>Welcome back</h2>
+    <p class="subtitle">Log in to join or start a meeting.</p>
+
+    <div class="input-group">
+      <span class="icon">&#128100;</span>
+      <input id="email" placeholder="Email" type="email">
+    </div>
+  <div class="input-group">
+  <span class="icon">&#128274;</span>
+  <input id="password" placeholder="Password" type="password">
+  <span class="toggle-eye" onclick="togglePassword('password', this)">&#128065;</span>
+</div>
+    <button onclick="loginUser()">Log In</button>
+    <p class="error" id="error"></p>
+
+    <div class="links">
+      <a href="forgot-password.html">Forgot password?</a>
+      <a href="register.html">Sign up</a>
+    </div>
+  </div>
+  <script src="js/auth.js"></script>
+</body>
+</html>
