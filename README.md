@@ -50,6 +50,7 @@ Chat and whiteboard events are relayed through the same signaling server and kep
 
 ## Project Structure
 
+\`\`\`
 synora/
 ├── backend/
 │   ├── server.js              # Express + Socket.io entry point; also serves the frontend
@@ -84,6 +85,7 @@ synora/
         ├── dashboard.js
         ├── lobby.js
         └── room.js              # Core WebRTC + chat + whiteboard logic
+\`\`\`
 
 ## Known Limitations & Trade-offs
 
