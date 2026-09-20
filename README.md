@@ -50,8 +50,6 @@ Chat and whiteboard events are relayed through the same signaling server and kep
 
 ## Project Structure
 
-## Project Structure
-
 ```
 synora/
 ├── backend/
