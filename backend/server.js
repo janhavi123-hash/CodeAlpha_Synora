@@ -21,6 +21,10 @@ app.use(express.json());
 // Serve frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+app.get('/', (req, res) => {
+  res.redirect('/login.html');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/files', fileRoutes);
