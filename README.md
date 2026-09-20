@@ -52,42 +52,21 @@ Chat and whiteboard events are relayed through the same signaling server and kep
 
 ## Project Structure
 
-\`\`\`
 synora/
 ├── backend/
-│   ├── server.js              # Express + Socket.io entry point; also serves the frontend
-│   ├── config/
-│   │   └── db.js              # MongoDB connection
-│   ├── models/
-│   │   ├── User.js
-│   │   └── Room.js
-│   ├── middleware/
-│   │   └── auth.js            # JWT verification for REST routes
-│   ├── routes/
-│   │   ├── authRoutes.js      # Register, login, forgot/reset password
-│   │   ├── roomRoutes.js      # Create/join rooms
-│   │   └── fileRoutes.js      # File upload endpoint
-│   ├── socket/
-│   │   └── signaling.js       # WebRTC signaling, chat, whiteboard relay (JWT-authenticated)
-│   ├── utils/
-│   │   └── sendEmail.js       # OTP email sender
-│   └── uploads/                # Uploaded files (gitignored)
+│ ├── server.js
+│ ├── config/db.js
+│ ├── models/ (User.js, Room.js)
+│ ├── middleware/auth.js
+│ ├── routes/ (authRoutes.js, roomRoutes.js, fileRoutes.js)
+│ ├── socket/signaling.js
+│ ├── utils/sendEmail.js
+│ └── uploads/ (gitignored)
 └── frontend/
-    ├── login.html
-    ├── register.html
-    ├── forgot-password.html
-    ├── reset-password.html
-    ├── dashboard.html
-    ├── lobby.html              # Pre-join camera/mic check
-    ├── room.html                # Main call UI
-    ├── css/
-    │   └── style.css
-    └── js/
-        ├── auth.js
-        ├── dashboard.js
-        ├── lobby.js
-        └── room.js              # Core WebRTC + chat + whiteboard logic
-\`\`\`
+├── login.html, register.html, forgot-password.html, reset-password.html
+├── dashboard.html, lobby.html, room.html
+├── css/style.css
+└── js/ (auth.js, dashboard.js, lobby.js, room.js)
 
 ## Known Limitations & Trade-offs
 
