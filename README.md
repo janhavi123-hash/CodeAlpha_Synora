@@ -52,6 +52,7 @@ Chat and whiteboard events are relayed through the same signaling server and kep
 
 ## Project Structure
 
+```
 synora/
 ├── backend/
 │ ├── server.js
@@ -67,6 +68,7 @@ synora/
 ├── dashboard.html, lobby.html, room.html
 ├── css/style.css
 └── js/ (auth.js, dashboard.js, lobby.js, room.js)
+```
 
 ## Known Limitations & Trade-offs
 
