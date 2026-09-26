@@ -1,6 +1,7 @@
 const rooms = {}; // { roomId: [socketId1, socketId2, ...] }
 const whiteboardHistory = {}; // { roomId: [ {fromX, fromY, toX, toY, color, width}, ... ] }
 const chatHistory = {}; // { roomId: [ {message, from}, ... ] }
+const roomUserMap = {}; // { roomId: { userId: socketId } }
 
 const jwt = require('jsonwebtoken');
 
@@ -24,6 +25,21 @@ const setupSignaling = (io) => {
     console.log('User connected:', socket.id);
 
     socket.on('join-room', (roomId) => {
+  const userId = socket.user.id;
+
+  if (!roomUserMap[roomId]) roomUserMap[roomId] = {};
+
+  // If this same logged-in user already has an active connection in this room
+  // (e.g. their old connection hasn't timed out yet after a reconnect), force it out first
+  const existingSocketId = roomUserMap[roomId][userId];
+  if (existingSocketId && existingSocketId !== socket.id) {
+    rooms[roomId] = (rooms[roomId] || []).filter((id) => id !== existingSocketId);
+    io.to(roomId).emit('user-left', existingSocketId);
+    console.log(`Removed stale connection ${existingSocketId} for user ${userId} in room ${roomId}`);
+  }
+
+  roomUserMap[roomId][userId] = socket.id;
+
   socket.join(roomId);
 
   if (!rooms[roomId]) rooms[roomId] = [];
@@ -32,16 +48,15 @@ const setupSignaling = (io) => {
   socket.to(roomId).emit('user-joined', socket.id);
 
   socket.roomId = roomId;
+  socket.userId = userId;
 
-  // Send existing whiteboard drawings to the newly joined user
   if (whiteboardHistory[roomId]) {
     socket.emit('whiteboard-history', whiteboardHistory[roomId]);
   }
 
-  // Send existing chat history to the newly joined user
-if (chatHistory[roomId]) {
-  socket.emit('chat-history', chatHistory[roomId]);
-}
+  if (chatHistory[roomId]) {
+    socket.emit('chat-history', chatHistory[roomId]);
+  }
 });
 
     // relay WebRTC offer to the other person
@@ -86,13 +101,18 @@ socket.on('whiteboard-clear', ({ roomId }) => {
 });
 
     socket.on('disconnect', () => {
-      const roomId = socket.roomId;
-      if (roomId && rooms[roomId]) {
-        rooms[roomId] = rooms[roomId].filter((id) => id !== socket.id);
-        socket.to(roomId).emit('user-left', socket.id);
-      }
-      console.log('User disconnected:', socket.id);
-    });
+  const roomId = socket.roomId;
+  if (roomId && rooms[roomId]) {
+    rooms[roomId] = rooms[roomId].filter((id) => id !== socket.id);
+    socket.to(roomId).emit('user-left', socket.id);
+
+    // Only clear the user-map entry if this socket is still the "current" one for that user
+    if (roomUserMap[roomId] && roomUserMap[roomId][socket.userId] === socket.id) {
+      delete roomUserMap[roomId][socket.userId];
+    }
+  }
+  console.log('User disconnected:', socket.id);
+});
   });
 };
 
