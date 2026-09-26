@@ -1,10 +1,13 @@
 # Synora — Real-Time Video Conferencing & Collaboration App
 
-Synora is a full-stack, real-time video conferencing application built as a Zoom/Google Meet-style tool. It supports multi-user video calls, screen sharing, live chat, file sharing, and a collaborative whiteboard — all built from scratch using WebRTC, Socket.io, and the MERN-adjacent stack(Node.js/Express/MongoDB).
+Synora is a full-stack, real-time video conferencing application built as a Zoom/Google Meet-style tool. It supports multi-user video calls, screen sharing, live chat, file sharing, and a collaborative whiteboard — all built from scratch using WebRTC, Socket.io, and the MERN-adjacent stack (Node.js/Express/MongoDB).
 
-**Live demo:** https://codealpha-synora.onrender.com
+**Live demo:** https://synora-ndns.onrender.com
 
 > Note: hosted on Render's free tier, which sleeps after 15 minutes of inactivity. The first request after idle time may take 30–50 seconds to wake up.
+
+## 🎥 Demo Video
+[Click here to watch the demo](https://drive.google.com/file/d/1YwjjEzHsHa9cHOAf18GZmfrR2ZjWMusn/view?usp=drivesdk)
 
 ---
 
@@ -28,7 +31,7 @@ Synora is a full-stack, real-time video conferencing application built as a Zoom
 **Database:** MongoDB Atlas (Mongoose)
 **Real-time communication:** WebRTC (media) + Socket.io (signaling)
 **Auth:** JWT, bcrypt
-**Email:** Nodemailer (Gmail SMTP) for OTP-based password reset
+**Email:** Brevo Transactional Email API for OTP-based password reset
 **File uploads:** Multer
 **Hosting:** Render
 
@@ -45,6 +48,8 @@ Synora uses three cooperating layers:
 Video calling uses a **mesh topology** (every participant connects directly to every other). This works well for small groups (tested with 3 participants across different devices/networks) but doesn't scale efficiently beyond that — a production system would use an SFU media server instead. This is an intentional, known scope decision.
 
 Chat and whiteboard events are relayed through the same signaling server and kept in server memory per room, so participants who join mid-session or reconnect after a dropped connection receive full history automatically.
+
+Password-reset emails are sent via **Brevo's transactional email API** (HTTPS-based) rather than direct SMTP. This was a deliberate fix: Render's free tier blocks outbound SMTP ports (465/587) as an anti-spam measure, which caused email delivery to hang and time out when using Gmail's SMTP directly. Switching to an HTTP-based email API resolved this, since HTTPS traffic (port 443) is never blocked on cloud hosting platforms.
 
 ---
 
@@ -74,6 +79,7 @@ synora/
 - **Screen sharing is desktop-only** — most mobile browsers don't reliably support `getDisplayMedia`.
 - **Free-tier TURN server** — has bandwidth limits; a production app would use a dedicated TURN provider.
 - **File uploads use local disk storage**, which is ephemeral on Render's free tier — files are wiped on redeploy/restart. Production would use cloud storage (e.g., S3, Cloudinary).
+- **Outbound SMTP ports are blocked on Render's free tier** — resolved by using Brevo's HTTPS-based transactional email API instead of direct SMTP.
 - **Free-tier hosting** — cold-start delay after inactivity.
 
 ---
