@@ -86,7 +86,3 @@ synora/
 - WebRTC media is encrypted end-to-end by default (DTLS-SRTP).
 
 ---
-
-## Author
-
-Janhavi Sonawane=as part of a full-stack development internship project.
