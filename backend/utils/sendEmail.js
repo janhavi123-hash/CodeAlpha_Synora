@@ -9,7 +9,7 @@ const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const sendOTPEmail = async (toEmail, otp) => {
   try {
     await apiInstance.sendTransacEmail({
-      sender: { email: 'janhavisonawane171@gmail.com', name: 'Synora' },
+      sender: { email: 'sonawanejanhavi125@gmail.com', name: 'Synora' },
       to: [{ email: toEmail }],
       subject: 'Synora — Password Reset Code',
       htmlContent: `
