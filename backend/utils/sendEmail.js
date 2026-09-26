@@ -1,14 +1,18 @@
-const { Resend } = require('resend');
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 const sendOTPEmail = async (toEmail, otp) => {
   try {
-    await resend.emails.send({
-      from: 'Synora <onboarding@resend.dev>',
-      to: toEmail,
+    await apiInstance.sendTransacEmail({
+      sender: { email: 'janhavisonawane171@gmail.com', name: 'Synora' },
+      to: [{ email: toEmail }],
       subject: 'Synora — Password Reset Code',
-      html: `
+      htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 400px; margin: auto;">
           <h2>Password Reset Request</h2>
           <p>Your verification code is:</p>
